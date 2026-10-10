@@ -8,6 +8,7 @@
 #include "predictor_resolver.h"
 #include "risk_factor_adjustable_model.h"
 #include "runtime_context.h"
+#include "sync_stream.h"
 
 #include <algorithm>
 #include <cctype>
@@ -20,7 +21,6 @@
 #include <ranges>
 #include <sstream>
 #include <string_view>
-#include <syncstream>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -233,7 +233,7 @@ void print_income_adjustment_strata_table(
         out << " |\n";
     }
     out << "+--------+----------------------+-------+-------------+-------------+-------------+\n";
-    std::osyncstream(std::cout) << out.str();
+    hgps::osyncstream(std::cout) << out.str();
 }
 
 void print_final_income_category_table(const Population &population,
@@ -302,7 +302,7 @@ void print_final_income_category_table(const Population &population,
         out << " |\n";
     }
     out << "+----------+--------+-------------+-------------+-------------+\n";
-    std::osyncstream(std::cout) << out.str();
+    hgps::osyncstream(std::cout) << out.str();
 }
 
 void print_income_stratum_adjustment_examples_table(
@@ -378,7 +378,7 @@ void print_income_stratum_adjustment_examples_table(
     out << "+--------+----------------------+----------+----------------------+--------+-----+-----"
            "------"
            "--+---------------+-------------+-------------+-------------+-------------+\n";
-    std::osyncstream(std::cout) << out.str();
+    hgps::osyncstream(std::cout) << out.str();
 }
 
 } // namespace
@@ -663,7 +663,7 @@ void StaticLinearModel::generate_risk_factors(RuntimeContext &context) {
     set_logistic_factors(logistic_factors_set);
     static std::once_flag logistic_factors_print_once;
     std::call_once(logistic_factors_print_once, [&]() {
-        std::osyncstream(std::cout) << "\nSet " << logistic_factors_set.size()
+        hgps::osyncstream(std::cout) << "\nSet " << logistic_factors_set.size()
                                     << " logistic factors for simulated mean calculation\n";
     });
 
@@ -1477,7 +1477,7 @@ void StaticLinearModel::initialise_factors(RuntimeContext &context, Person &pers
             out << "\n2-stage factors: " << two_stage_count
                 << " | BoxCox-only factors (Stage 1 skipped): " << boxcox_only_count;
             out << "\n======================================";
-            std::osyncstream(std::cout) << out.str() << '\n';
+            hgps::osyncstream(std::cout) << out.str() << '\n';
 
             summary_printed = true;
         });

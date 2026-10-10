@@ -139,6 +139,7 @@ target_sources(
             "randombit_generator.h"
             "scenario.h"
             "sync_message.h"
+            "sync_stream.h"
             "two_step_value.h"
             "version.h"
             "weight_category.h"

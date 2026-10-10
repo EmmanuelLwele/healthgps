@@ -3,6 +3,7 @@
 
 #include "kevin_hall_model.h"
 #include "runtime_context.h"
+#include "sync_stream.h"
 #include "sync_message.h"
 
 #include <algorithm>
@@ -12,7 +13,6 @@
 #include <iterator>
 #include <limits>
 #include <sstream>
-#include <syncstream>
 #include <unordered_map>
 #include <utility>
 
@@ -1189,7 +1189,7 @@ void KevinHallModel::validate_weight_in_config_range(const RuntimeContext &conte
                                                                *range, above_maximum);
 
     if (above_maximum) {
-        std::osyncstream(std::cout) << "\n[WEIGHT RANGE WARNING] " << message << '\n';
+        hgps::osyncstream(std::cout) << "\n[WEIGHT RANGE WARNING] " << message << '\n';
         return;
     }
 

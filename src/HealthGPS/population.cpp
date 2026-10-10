@@ -1,4 +1,5 @@
 #include "population.h"
+#include <algorithm>
 #include <execution>
 
 #ifndef NDEBUG
@@ -34,8 +35,14 @@ std::size_t Population::size() const noexcept { return people_.size(); }
 std::size_t Population::initial_size() const noexcept { return initial_size_; }
 
 std::size_t Population::current_active_size() const noexcept {
-    auto active_pop_size = std::count_if(std::execution::par, people_.cbegin(), people_.cend(),
-                                         [](const auto &p) { return p.is_active(); });
+    const auto is_active = [](const auto &p) { return p.is_active(); };
+#if defined(__cpp_lib_execution)
+    auto active_pop_size =
+        std::count_if(std::execution::par, people_.cbegin(), people_.cend(), is_active);
+#else
+    // Standard libraries without parallel algorithms (e.g. Apple libc++)
+    auto active_pop_size = std::count_if(people_.cbegin(), people_.cend(), is_active);
+#endif
 
     return active_pop_size;
 }
